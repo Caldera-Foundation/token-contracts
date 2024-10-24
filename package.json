@@ -1,0 +1,17 @@
+{
+	"name": "era-contracts",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"postinstall": "node postinstall.mjs",
+		"build": "forge build",
+		"lint": "forge fmt --check && pnpm solhint \"{script,src,test}/**/*.sol\"",
+		"test": "forge test"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"solhint": "^5.0.3"
+	}
+}
