@@ -104,8 +104,9 @@ contract RollupToken is
         if (newMintCapBips > mintCapBips) {
             revert MintCapTooHigh();
         }
+        uint256 previousMintCapBips = mintCapBips;
         mintCapBips = newMintCapBips;
-        emit MintCapLowered(mintCapBips, newMintCapBips);
+        emit MintCapLowered(previousMintCapBips, newMintCapBips);
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
