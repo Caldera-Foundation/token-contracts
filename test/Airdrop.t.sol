@@ -65,6 +65,81 @@ contract AirdropTest is Test {
         assertEq(airdrop.endTime(), END_TIME);
     }
 
+    function testInvalidAirdropVaultInitialization() public {
+        Airdrop newUnproxiedAirdrop = new Airdrop();
+        ERC1967Proxy newAirdropProxy = new ERC1967Proxy(address(newUnproxiedAirdrop), "");
+        Airdrop newAirdrop = Airdrop(address(newAirdropProxy));
+        (address newGithubSigner,) = makeAddrAndKey("github_signer");
+        vm.expectRevert(Airdrop.InvalidAirdropVault.selector);
+        newAirdrop.initialize(
+            address(this),
+            address(0),
+            newGithubSigner,
+            address(token),
+            ADDRESS_CLAIM_MERKLE_ROOT,
+            ADDRESS_CLAIM_MESSAGE,
+            GITHUB_CLAIM_MERKLE_ROOT,
+            START_TIME,
+            END_TIME
+        );
+    }
+
+    function testInvalidGithubSignerInitialization() public {
+        Airdrop newUnproxiedAirdrop = new Airdrop();
+        ERC1967Proxy newAirdropProxy = new ERC1967Proxy(address(newUnproxiedAirdrop), "");
+        Airdrop newAirdrop = Airdrop(address(newAirdropProxy));
+        vm.expectRevert(Airdrop.InvalidGithubSigner.selector);
+        newAirdrop.initialize(
+            address(this),
+            AIRDROP_VAULT,
+            address(0),
+            address(token),
+            ADDRESS_CLAIM_MERKLE_ROOT,
+            ADDRESS_CLAIM_MESSAGE,
+            GITHUB_CLAIM_MERKLE_ROOT,
+            START_TIME,
+            END_TIME
+        );
+    }
+
+    function testInvalidTokenInitialization() public {
+        Airdrop newUnproxiedAirdrop = new Airdrop();
+        ERC1967Proxy newAirdropProxy = new ERC1967Proxy(address(newUnproxiedAirdrop), "");
+        Airdrop newAirdrop = Airdrop(address(newAirdropProxy));
+        (address newGithubSigner,) = makeAddrAndKey("github_signer");
+        vm.expectRevert(Airdrop.InvalidToken.selector);
+        newAirdrop.initialize(
+            address(this),
+            AIRDROP_VAULT,
+            newGithubSigner,
+            address(0),
+            ADDRESS_CLAIM_MERKLE_ROOT,
+            ADDRESS_CLAIM_MESSAGE,
+            GITHUB_CLAIM_MERKLE_ROOT,
+            START_TIME,
+            END_TIME
+        );
+    }
+
+    function testInvalidClaimPeriodInitialization() public {
+        Airdrop newUnproxiedAirdrop = new Airdrop();
+        ERC1967Proxy newAirdropProxy = new ERC1967Proxy(address(newUnproxiedAirdrop), "");
+        Airdrop newAirdrop = Airdrop(address(newAirdropProxy));
+        (address newGithubSigner,) = makeAddrAndKey("github_signer");
+        vm.expectRevert(Airdrop.InvalidClaimPeriod.selector);
+        newAirdrop.initialize(
+            address(this),
+            AIRDROP_VAULT,
+            newGithubSigner,
+            address(token),
+            ADDRESS_CLAIM_MERKLE_ROOT,
+            ADDRESS_CLAIM_MESSAGE,
+            GITHUB_CLAIM_MERKLE_ROOT,
+            END_TIME,
+            START_TIME
+        );
+    }
+
     function testPauseUnpause() public {
         airdrop.pause();
         assertTrue(airdrop.paused());

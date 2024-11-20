@@ -66,6 +66,10 @@ contract Airdrop is Initializable, UUPSUpgradeable, PausableUpgradeable, Ownable
     event AddressClaimed(address indexed account, uint256 amount);
     event GithubClaimed(address indexed account, string indexed githubUsername, uint256 amount);
 
+    error InvalidAirdropVault();
+    error InvalidGithubSigner();
+    error InvalidToken();
+    error InvalidClaimPeriod();
     error StartTimeTooLate();
     error EndTimeTooEarly();
     error BlockedAddress();
@@ -138,6 +142,23 @@ contract Airdrop is Initializable, UUPSUpgradeable, PausableUpgradeable, Ownable
         __UUPSUpgradeable_init();
         __Pausable_init();
         __Ownable_init(initialOwner);
+
+        if (airdropVault_ == address(0)) {
+            revert InvalidAirdropVault();
+        }
+
+        if (githubSigner_ == address(0)) {
+            revert InvalidGithubSigner();
+        }
+
+        if (token_ == address(0)) {
+            revert InvalidToken();
+        }
+
+        if (startTime_ > endTime_) {
+            revert InvalidClaimPeriod();
+        }
+
         airdropVault = airdropVault_;
         githubSigner = githubSigner_;
         token = token_;
