@@ -1,6 +1,8 @@
 ## Rollup Token Contracts
 
-Contracts for 1-click deployment of native tokens on customer rollups with ownability / upgradeability / distribution.
+Caldera Foundation token contracts.
+
+See `Zellic_audit_report.pdf` for audit report.
 
 ### `RollupToken.sol`
 
